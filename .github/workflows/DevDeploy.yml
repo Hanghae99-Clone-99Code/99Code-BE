@@ -43,6 +43,7 @@ jobs:
       - name: web docker build and push
         run: |
           docker build -t puri12/code99:${{ github.sha }} .
+          docker build -t puri12/code99:latest .
           docker push puri12/code99:${{ github.sha }}
           docker push puri12/code99:latest
 
