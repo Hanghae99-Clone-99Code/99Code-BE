@@ -1,6 +1,8 @@
 package com.hanghae.code99.controller;
 
+import com.hanghae.code99.controller.request.EmailCheckDto;
 import com.hanghae.code99.controller.request.LoginRequestDto;
+import com.hanghae.code99.controller.request.NicknameCheckDto;
 import com.hanghae.code99.controller.request.SignUpRequestDto;
 import com.hanghae.code99.controller.response.ResponseDto;
 import com.hanghae.code99.domain.Member;
@@ -61,7 +63,7 @@ public class MemberController {
 //    }
 
     @PostMapping("/api/members/check/email")
-    public ResponseDto<?> emailCheck(@RequestBody SignUpRequestDto requestDto){
+    public ResponseDto<?> emailCheck(@RequestBody EmailCheckDto requestDto){
         return memberService.checkDupEmail(requestDto);
     }
 //    //닉네임 중복확인
@@ -70,7 +72,7 @@ public class MemberController {
 //        return memberService.checkDupNickname(nickname);
 //    }
     @PostMapping("/api/members/check/nick")
-    public ResponseDto<?> nickCheck(@RequestBody SignUpRequestDto requestDto){
+    public ResponseDto<?> nickCheck(@RequestBody NicknameCheckDto requestDto){
         return memberService.checkDupNickname(requestDto);
     }
 }
