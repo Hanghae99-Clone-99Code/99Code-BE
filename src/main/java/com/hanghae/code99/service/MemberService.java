@@ -1,6 +1,8 @@
 package com.hanghae.code99.service;
 
+import com.hanghae.code99.controller.request.EmailCheckDto;
 import com.hanghae.code99.controller.request.LoginRequestDto;
+import com.hanghae.code99.controller.request.NicknameCheckDto;
 import com.hanghae.code99.controller.request.SignUpRequestDto;
 import com.hanghae.code99.controller.response.MemberResponseDto;
 import com.hanghae.code99.controller.response.ResponseDto;
@@ -123,14 +125,14 @@ public class MemberService {
 //    }
 
     @Transactional(readOnly = true)
-    public ResponseDto<?> checkDupEmail(SignUpRequestDto requestDto){
+    public ResponseDto<?> checkDupEmail(EmailCheckDto requestDto){
         if (null != isPresentEmail(requestDto.getEmail())) {
             return ResponseDto.fail("DUPLICATED_EMAIL", "중복된 이메일입니다.");
         }
         return ResponseDto.success("사용가능한 이메일입니다.");
     }
     @Transactional(readOnly = true)
-    public ResponseDto<?> checkDupNickname(SignUpRequestDto requestDto){
+    public ResponseDto<?> checkDupNickname(NicknameCheckDto requestDto){
         if (null != isPresentNickname(requestDto.getNickname())) {
             return ResponseDto.fail("DUPLICATED_NICKNAME", "중복된 닉네임입니다.");
         }
