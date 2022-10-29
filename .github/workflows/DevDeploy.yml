@@ -44,6 +44,7 @@ jobs:
         run: |
           docker build -t puri12/code99:${{ github.sha }} .
           docker push puri12/code99:${{ github.sha }}
+          docker push puri12/code99:latest
 
         ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
       - name: Deploy
