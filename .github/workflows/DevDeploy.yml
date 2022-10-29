@@ -59,7 +59,8 @@ jobs:
           username: ${{ secrets.DEV_SSH_USERNAME }}
           password: ${{ secrets.DEV_SSH_PASSWD }}
           script: |
-            docker pull puri12/code99:${{ github.sha }}
-            docker stop code99
-            docker rm code99
-            docker run -d --rm --name code99 -p 80:8080 puri12/code99:${{ github.sha }}
+              docker-compose up -d
+#             docker pull puri12/code99:${{ github.sha }}
+#             docker stop code99
+#             docker rm code99
+#             docker run -d --rm --name code99 -p 80:8080 puri12/code99:${{ github.sha }}
