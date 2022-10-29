@@ -80,8 +80,8 @@ public class SecurityConfig {
                 // 로그인, 회원가입 허용
                 .antMatchers(HttpMethod.POST, "/api/members/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/members/signup").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/members/email").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/members/nick").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/members/check/email").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/members/check/nick").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/js/**").permitAll()
