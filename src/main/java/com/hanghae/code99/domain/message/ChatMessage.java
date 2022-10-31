@@ -28,7 +28,7 @@ public class ChatMessage {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "room_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private ChatRoom roomid;
 
