@@ -8,14 +8,13 @@ public class DefaultImages {
     private static final Random random = new Random(System.currentTimeMillis());
 
     private static final String[] DEFAULT_PROFILE_PICS = {
-            "https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/309/59932b0eb046f9fa3e063b8875032edd_crop.jpeg",
-            "https://img2.daumcdn.net/thumb/R158x158/?fname=http%3A//twg.tset.daumcdn.net/profile/7nuPvrFxTag0%3Ft=20220821142244",
-            "https://accounts.kakao.com/assets/weblogin/img_profile.png",
-            "https://media.istockphoto.com/vectors/mustache-icon-flat-web-pictogram-or-sign-isolated-on-grey-background-vector-id1175915187?k=20&m=1175915187&s=170667a&w=0&h=YkiE0arkfZ5pJfiTPYI1jZFLw-8Y1AQr2V9Pe5U9JJQ=",
-            "https://user-images.githubusercontent.com/15075501/186417883-578fcfe2-39d0-4af8-9384-f91f99265ad3.png",
-            "https://img1.daumcdn.net/thumb/C176x176/?fname=https://k.kakaocdn.net/dn/bJcsE9/btq5MnYuK4N/k3akMAFLyfj9Sxh33R2EnK/img.png",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7dEBGob06vbYnOmEIFGQCHxSz1h_YV2WQCA&usqp=CAU",
-            "https://user-images.githubusercontent.com/15075501/186452894-24fb9f40-7b83-4ee4-837d-b158258332c0.png",
+            "https://byeongbumbucket.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84%EC%9D%B4%EB%AF%B8%EC%A7%80/001.png",
+            "https://byeongbumbucket.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84%EC%9D%B4%EB%AF%B8%EC%A7%80/002.png",
+            "https://byeongbumbucket.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84%EC%9D%B4%EB%AF%B8%EC%A7%80/003.png",
+            "https://byeongbumbucket.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84%EC%9D%B4%EB%AF%B8%EC%A7%80/004.png",
+            "https://byeongbumbucket.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84%EC%9D%B4%EB%AF%B8%EC%A7%80/005.png",
+            "https://byeongbumbucket.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84%EC%9D%B4%EB%AF%B8%EC%A7%80/006.png",
+            "https://byeongbumbucket.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84%EC%9D%B4%EB%AF%B8%EC%A7%80/007.png",
             "https://byeongbumbucket.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20221029_210115603.png"
     };
 
