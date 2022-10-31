@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,13 +28,13 @@ public class MemberController {
 
     // 회원가입
     @PostMapping("/api/members/signup")
-    public ResponseDto<?> signup(@RequestBody SignUpRequestDto requestDto) {
+    public ResponseDto<?> signup(@RequestBody @Valid SignUpRequestDto requestDto) {
         return memberService.signup(requestDto);
     }
 
     // 로그인
     @PostMapping("/api/members/login")
-    public ResponseDto<?> login(@RequestBody LoginRequestDto requestDto,
+    public ResponseDto<?> login(@RequestBody @Valid LoginRequestDto requestDto,
                                 HttpServletResponse response) {
         return memberService.login(requestDto, response);
     }
@@ -63,7 +64,7 @@ public class MemberController {
 //    }
 
     @PostMapping("/api/members/check/email")
-    public ResponseDto<?> emailCheck(@RequestBody EmailCheckDto requestDto){
+    public ResponseDto<?> emailCheck(@RequestBody @Valid EmailCheckDto requestDto){
         return memberService.checkDupEmail(requestDto);
     }
 //    //닉네임 중복확인
@@ -72,7 +73,7 @@ public class MemberController {
 //        return memberService.checkDupNickname(nickname);
 //    }
     @PostMapping("/api/members/check/nick")
-    public ResponseDto<?> nickCheck(@RequestBody NicknameCheckDto requestDto){
+    public ResponseDto<?> nickCheck(@RequestBody @Valid NicknameCheckDto requestDto){
         return memberService.checkDupNickname(requestDto);
     }
 }
