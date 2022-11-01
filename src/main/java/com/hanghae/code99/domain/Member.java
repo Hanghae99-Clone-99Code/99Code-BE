@@ -1,5 +1,6 @@
 package com.hanghae.code99.domain;
 
+import com.hanghae.code99.controller.request.ProfileRequestDto;
 import com.hanghae.code99.controller.request.SignUpRequestDto;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -25,10 +26,8 @@ public class Member extends Timestamped {
     @Column(nullable = false)
     private String nickname;
 
-    @Column(nullable = false)
     private String profilePic;
 
-    @Column(nullable = false)
     private String introduce;
 
 
@@ -42,6 +41,12 @@ public class Member extends Timestamped {
 
     public static Member of(SignUpRequestDto requestDto, String encodedPassword, String profilePic) {
         return new Member(requestDto.getEmail(), encodedPassword, requestDto.getNickname(), profilePic);
+    }
+
+    public void editProfile(ProfileRequestDto requestDto){
+        this.nickname = requestDto.getNickname();
+//        this.profilePic = requestDto.getProfilePic();
+        this.introduce = requestDto.getIntroduce();
     }
 
 }
