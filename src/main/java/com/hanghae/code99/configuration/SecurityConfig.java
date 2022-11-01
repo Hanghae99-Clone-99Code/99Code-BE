@@ -82,6 +82,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/api/members/signup").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/members/check/email").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/members/check/nick").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/members/find/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/js/**").permitAll()

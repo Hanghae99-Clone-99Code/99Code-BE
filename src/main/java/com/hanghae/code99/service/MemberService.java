@@ -1,9 +1,6 @@
 package com.hanghae.code99.service;
 
-import com.hanghae.code99.controller.request.EmailCheckDto;
-import com.hanghae.code99.controller.request.LoginRequestDto;
-import com.hanghae.code99.controller.request.NicknameCheckDto;
-import com.hanghae.code99.controller.request.SignUpRequestDto;
+import com.hanghae.code99.controller.request.*;
 import com.hanghae.code99.controller.response.MemberResponseDto;
 import com.hanghae.code99.controller.response.ResponseDto;
 import com.hanghae.code99.domain.DefaultImages;
@@ -107,22 +104,73 @@ public class MemberService {
         return tokenProvider.deleteRefreshToken(member);
     }
 
-//    @Transactional(readOnly = true)
-//    public ResponseDto<?> checkDupNickname(String nickname) {
-//        if (null != isPresentNickname(nickname)) {
-//            return ResponseDto.fail("DUPLICATED_NICKNAME", "중복된 닉네임입니다.");
-//        }
-//        return ResponseDto.success("사용가능한 닉네임입니다.");
+
+    // 내 프로필 조회
+    public ResponseDto<?> myProfile(Member member) {
+
+        return ResponseDto.success(MemberResponseDto.builder()
+                .id(member.getMemberId())
+                .email(member.getEmail())
+                .nickname(member.getNickname())
+                .profilePic(member.getProfilePic())
+                .introduce(member.getIntroduce())
+                .createdAt(member.getCreatedAt())
+                .modifiedAt(member.getModifiedAt())
+                .build());
+    }
+
+//    public ResponseDto<?> LoginInfo(Member member) {
+//
+//        return ResponseDto.success(MemberResponseDto.builder()
+//                .id(member.getMemberId())
+//                .nickname(member.getNickname())
+//                .profilePic(member.getProfilePic())
+//                .introduce(member.getIntroduce())
+//                .createdAt(member.getCreatedAt())
+//                .modifiedAt(member.getModifiedAt())
+//                .build());
 //    }
 
 
-//    @Transactional(readOnly = true)
-//    public ResponseDto<?> checkDupEmail(String email) {
-//        if (null != isPresentEmail(email)) {
-//            return ResponseDto.fail("DUPLICATED_EMAIL", "중복된 이메일입니다.");
-//        }
-//        return ResponseDto.success("사용가능한 이메일입니다.");
-//    }
+        // 내 프로필 수정
+    public ResponseDto<?> editProfile(Member member, ProfileRequestDto profileRequestDto) {
+        if (null != isPresentNickname(profileRequestDto.getNickname())) {
+            return ResponseDto.fail("DUPLICATED_NICKNAME","중복된 닉네임 입니다.");
+        }
+        // 회원 정보 업데이트
+        member.editProfile(profileRequestDto);
+        // 저장
+        memberRepository.save(member);
+
+        return ResponseDto.success(MemberResponseDto.builder()
+                .id(member.getMemberId())
+                .nickname(member.getNickname())
+                .profilePic(member.getProfilePic())
+                .introduce(member.getIntroduce())
+                .createdAt(member.getCreatedAt())
+                .modifiedAt(member.getModifiedAt())
+                .build());
+    }
+
+    //개별 회원정보 조회
+    public ResponseDto<?> viewProfile(Long member_id) {
+        Optional<Member> optionalMember = memberRepository.findById(member_id);
+
+        Member member = optionalMember.orElse(null);
+
+        if (null != member){
+            return ResponseDto.success(MemberResponseDto.builder()
+                    .id(member.getMemberId())
+                    .email(member.getEmail())
+                    .nickname(member.getNickname())
+                    .profilePic(member.getProfilePic())
+                    .introduce(member.getIntroduce())
+                    .createdAt(member.getCreatedAt())
+                    .build());
+        }
+
+        return ResponseDto.fail("NOT_FOUND","해당 아이디가 없습니다");
+    }
 
     @Transactional(readOnly = true)
     public ResponseDto<?> checkDupEmail(EmailCheckDto requestDto){

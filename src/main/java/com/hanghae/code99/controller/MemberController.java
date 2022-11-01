@@ -1,9 +1,6 @@
 package com.hanghae.code99.controller;
 
-import com.hanghae.code99.controller.request.EmailCheckDto;
-import com.hanghae.code99.controller.request.LoginRequestDto;
-import com.hanghae.code99.controller.request.NicknameCheckDto;
-import com.hanghae.code99.controller.request.SignUpRequestDto;
+import com.hanghae.code99.controller.request.*;
 import com.hanghae.code99.controller.response.ResponseDto;
 import com.hanghae.code99.domain.Member;
 import com.hanghae.code99.domain.jwttoken.JwtTokenDto;
@@ -57,23 +54,47 @@ public class MemberController {
         return memberService.logout(request);
     }
 
-//    //이메일 중복확인
-//    @GetMapping("/api/members/check/{email}")
-//    public ResponseDto<?> checkDupEmail(@PathVariable String email){
-//        return memberService.checkDupEmail(email);
-//    }
-
+    //이메일 중복확인
     @PostMapping("/api/members/check/email")
     public ResponseDto<?> emailCheck(@RequestBody @Valid EmailCheckDto requestDto){
         return memberService.checkDupEmail(requestDto);
     }
-//    //닉네임 중복확인
-//    @GetMapping("/api/members/check/{nickname}")
-//    public ResponseDto<?> checkDupNickname(@PathVariable String nickname){
-//        return memberService.checkDupNickname(nickname);
-//    }
+
+    //닉네임 중복확인
     @PostMapping("/api/members/check/nick")
     public ResponseDto<?> nickCheck(@RequestBody @Valid NicknameCheckDto requestDto){
         return memberService.checkDupNickname(requestDto);
     }
+    //내 프로필 조회
+    @GetMapping("/api/auth/members/profiles")
+    public ResponseDto<?> myProfile(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        Member member = userDetails.getMember();
+
+        return  memberService.myProfile(member);
+    }
+
+    //개별 프로필 조회
+    @GetMapping("/api/members/find/{memberId}")
+    public ResponseDto<?> veiwProfile(@PathVariable Long memberId){
+        return memberService.viewProfile(memberId);
+    }
+//    @GetMapping("/api/auth/members/info")
+//    public ResponseDto<?> LoginInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        Member member = userDetails.getMember();
+//
+//        try {
+//            return  memberService.LoginInfo(member);
+//        } catch (Exception e) {
+//            return  ResponseDto.fail("NOT_STATE_LOGIN", e.getMessage());
+//        }
+//    }
+
+    //내 프로필 수정
+    @PutMapping("/api/auth/members/profiles/edit")
+    public ResponseDto<?> editProfile(@RequestBody @Valid ProfileRequestDto profileRequestDto,
+                                      @AuthenticationPrincipal UserDetailsImpl userDetails){
+        Member member = userDetails.getMember();
+        return memberService.editProfile(member, profileRequestDto);
+    }
+
 }
