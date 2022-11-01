@@ -1,6 +1,7 @@
 package com.hanghae.code99.domain.message;
 
 import com.hanghae.code99.domain.Member;
+import com.hanghae.code99.domain.Timestamped;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Builder
-public class ChatMessage {
+public class ChatMessage extends Timestamped {
 
     public enum MessageType {
         ENTER, TALK
@@ -33,6 +34,5 @@ public class ChatMessage {
     private ChatRoom roomid;
 
     @Column
-    //내용
     private String message;
 }
