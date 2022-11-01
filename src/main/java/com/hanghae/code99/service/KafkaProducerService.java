@@ -22,14 +22,14 @@ public class KafkaProducerService {
     public void sendMessage(ChatMessageDto chatMessageDto) {
         System.out.println("kafka producer : " + chatMessageDto.getMessage());
 
+        kafkaTemplate.send(TOPIC, chatMessageDto);
+
         ChatMessage chatMessage = ChatMessage.builder()
                 .message(chatMessageDto.getMessage())
                 .member(memberRepository.findByNickname(chatMessageDto.getSender()).get())
                 .roomid(chatRoomRepository.findById(chatMessageDto.getRoomId()).get())
                 .type(chatMessageDto.getType())
                 .build();
-
-        kafkaTemplate.send(TOPIC, chatMessageDto);
         chatMessageRepository.save(chatMessage);
 
     }

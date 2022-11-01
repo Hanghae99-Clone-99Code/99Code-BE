@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +28,7 @@ public class MemberController {
 
     // 회원가입
     @PostMapping("/api/members/signup")
-    public ResponseDto<?> signup(@RequestBody SignUpRequestDto requestDto) {
+    public ResponseDto<?> signup(@RequestBody @Valid SignUpRequestDto requestDto) {
         return memberService.signup(requestDto);
     }
 

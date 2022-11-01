@@ -1,12 +1,16 @@
 package com.hanghae.code99.service;
 
+import com.hanghae.code99.controller.response.ResponseDto;
+import com.hanghae.code99.domain.Member;
 import com.hanghae.code99.domain.message.ChatRoom;
+import com.hanghae.code99.jwt.userdetails.UserDetailsImpl;
 import com.hanghae.code99.repositrory.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -16,20 +20,20 @@ public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
 
     //채팅방 불러오기
-    public List<ChatRoom> findAllRoom() {
-        //채팅방 최근 생성 순으로 반환
-        return chatRoomRepository.findAll();
+    public ResponseDto<?> findAllRoom(UserDetailsImpl userDetails) {
+        Optional<ChatRoom> chatRoom = chatRoomRepository.findByMembersContains(userDetails.getMember());
+        return ResponseDto.success(chatRoom);
     }
 
     //채팅방 하나 불러오기
-    public ChatRoom findById(Long roomId) {
-
-        return chatRoomRepository.findById(roomId).orElse(null);
+    public ResponseDto<?> findById(Long roomId) {
+        return ResponseDto.success(chatRoomRepository.findById(roomId));
     }
 
     //채팅방 생성
-    public ChatRoom createRoom(String name) {
-        ChatRoom chatRoom = new ChatRoom(name);
+    public ChatRoom createRoom(String name, UserDetailsImpl userDetails) {
+        Member member = userDetails.getMember();
+        ChatRoom chatRoom = new ChatRoom(name, member);
         chatRoomRepository.save(chatRoom);
         return chatRoom;
     }
