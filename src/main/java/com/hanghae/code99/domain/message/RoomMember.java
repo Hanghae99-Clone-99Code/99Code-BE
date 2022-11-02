@@ -25,5 +25,4 @@ public class RoomMember {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-
 }
