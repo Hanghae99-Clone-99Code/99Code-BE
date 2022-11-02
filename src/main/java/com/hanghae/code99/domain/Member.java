@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Random;
 
 @Entity
 @Getter
@@ -33,6 +34,7 @@ public class Member extends Timestamped {
     private String profilePic;
 
     private String introduce;
+    Random random = new Random();
 
     private boolean status;
 
@@ -43,7 +45,7 @@ public class Member extends Timestamped {
     private Member(String email, String password, String nickname, String profilePic) {
         this.email = email;
         this.password = password;
-        this.nickname = nickname;
+        this.nickname = nickname+"#"+ (random.nextInt(888888) + 111111);
         this.profilePic = profilePic;
         this.introduce = "";
     }
