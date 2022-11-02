@@ -3,7 +3,6 @@ package com.hanghae.code99.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hanghae.code99.controller.request.ProfileRequestDto;
 import com.hanghae.code99.controller.request.SignUpRequestDto;
-import com.hanghae.code99.domain.message.Room;
 import com.hanghae.code99.domain.message.RoomMember;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,7 +10,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Random;
 
 @Entity
 @Getter
@@ -34,24 +32,26 @@ public class Member extends Timestamped {
     private String profilePic;
 
     private String introduce;
-    Random random = new Random();
 
+    private String hashtag;
     private boolean status;
 
     @JsonIgnore
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoomMember> roomList;
 
-    private Member(String email, String password, String nickname, String profilePic) {
+
+    private Member(String email, String password, String nickname, String profilePic, String hashtag) {
         this.email = email;
         this.password = password;
-        this.nickname = nickname+"#"+ (random.nextInt(888888) + 111111);
+        this.nickname = nickname;
         this.profilePic = profilePic;
+        this.hashtag = hashtag;
         this.introduce = "";
     }
 
-    public static Member of(SignUpRequestDto requestDto, String encodedPassword, String profilePic) {
-        return new Member(requestDto.getEmail(), encodedPassword, requestDto.getNickname(), profilePic);
+    public static Member of(SignUpRequestDto requestDto, String encodedPassword, String profilePic, String hashtag) {
+        return new Member(requestDto.getEmail(), encodedPassword, requestDto.getNickname(), profilePic, hashtag);
     }
 
     public void editProfile(ProfileRequestDto requestDto){

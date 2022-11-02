@@ -1,6 +1,5 @@
 package com.hanghae.code99.controller.response;
 
-import com.hanghae.code99.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,17 +17,20 @@ public class MemberResponseDto {
   private String nickname;
   private String profilePic;
   private String introduce;
+  private String hashtag;
   private LocalDateTime createdAt;
   private LocalDateTime modifiedAt;
 
 
 
-
-  public MemberResponseDto(Member member){
-    this.id = member.getMemberId();
-    this.email = member.getEmail();
-    this.nickname = member.getNickname();
-    this.profilePic = member.getProfilePic();
-    this.createdAt = member.getCreatedAt();
-  }
+//  public MemberResponseDto(Member member){
+//    this.id = member.getMemberId();
+//    this.email = member.getEmail();
+//    this.nickname = member.getNickname();
+//    this.profilePic = member.getProfilePic();
+//    this.introduce = member.getIntroduce();
+//    this.hashtag = member.getHashtag();
+//    this.createdAt = member.getCreatedAt();
+//    this.modifiedAt = member.getModifiedAt();
+//  }
 }
