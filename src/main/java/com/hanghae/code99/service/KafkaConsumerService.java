@@ -17,7 +17,7 @@ public class KafkaConsumerService {
         System.out.println("카프카 컨슈머 = " + message.getMessage());
 
         if (ChatMessageDto.MessageType.ENTER.equals(message.getType())) {
-            message.setMessage(message.getNickname()+"님이 입장하였습니다.");
+            message.setMessage(message.getSender()+"님이 입장하였습니다.");
         }
 
         sendingOperations.convertAndSend("/topic/chat/room/"+message.getRoomId(), message );
