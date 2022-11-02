@@ -35,7 +35,6 @@ public class Member extends Timestamped {
 
     private String introduce;
     Random random = new Random();
-    private final String checkNum = String.valueOf(random.nextInt(888888) + 111111);
 
     private boolean status;
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -45,7 +44,7 @@ public class Member extends Timestamped {
     private Member(String email, String password, String nickname, String profilePic) {
         this.email = email;
         this.password = password;
-        this.nickname = nickname;
+        this.nickname = nickname+"#"+ (random.nextInt(888888) + 111111);
         this.profilePic = profilePic;
         this.introduce = "";
     }
