@@ -30,6 +30,7 @@ public class Member extends Timestamped {
 
     private String introduce;
 
+    private boolean status;
 
     private Member(String email, String password, String nickname, String profilePic) {
         this.email = email;
@@ -49,4 +50,7 @@ public class Member extends Timestamped {
         this.introduce = requestDto.getIntroduce();
     }
 
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 }

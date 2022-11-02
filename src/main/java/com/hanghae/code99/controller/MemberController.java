@@ -65,6 +65,7 @@ public class MemberController {
     public ResponseDto<?> nickCheck(@RequestBody @Valid NicknameCheckDto requestDto){
         return memberService.checkDupNickname(requestDto);
     }
+
     //내 프로필 조회
     @GetMapping("/api/auth/members/profiles")
     public ResponseDto<?> myProfile(@AuthenticationPrincipal UserDetailsImpl userDetails){
