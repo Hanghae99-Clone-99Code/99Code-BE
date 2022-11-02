@@ -62,6 +62,7 @@ public class MemberService {
                         .profilePic(member.getProfilePic())
                         .introduce(member.getIntroduce())
                         .hashtag(member.getHashtag())
+                        .status(member.isStatus())
                         .createdAt(member.getCreatedAt())
                         .build());
     }
@@ -80,7 +81,12 @@ public class MemberService {
         JwtTokenDto tokenDto = tokenProvider.generateTokenDto(member);
         tokenToHeaders(tokenDto, response);
 
+        // 접속 중
         member.setStatus(true);
+        // DB에 status 업데이트
+        memberRepository.save(member);
+
+
 
         return ResponseDto.success(
                 MemberResponseDto.builder()
@@ -90,6 +96,7 @@ public class MemberService {
                         .profilePic(member.getProfilePic())
                         .introduce(member.getIntroduce())
                         .hashtag(member.getHashtag())
+                        .status(member.isStatus())
                         .createdAt(member.getCreatedAt())
                         .build()
         );
@@ -110,8 +117,10 @@ public class MemberService {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "사용자를 찾을 수 없습니다.");
         }
-
+        //접속 해제
         member.setStatus(false);
+        // DB에 status 업데이트
+        memberRepository.save(member);
 
         return tokenProvider.deleteRefreshToken(member);
     }
@@ -194,7 +203,6 @@ public class MemberService {
         Optional<Member> optionalMember = memberRepository.findByHashtag(hashtag);
         return optionalMember.orElse(null);
     }
-
 
 }
 
