@@ -56,7 +56,7 @@ public class MemberService {
                 MemberResponseDto.builder()
                         .id(member.getMemberId())
                         .email(member.getEmail())
-                        .nickname(member.getNickname())
+                        .nickname(member.getNickname()+"#"+member.getCheckNum())
                         .createdAt(member.getCreatedAt())
                         .build());
     }
@@ -81,7 +81,7 @@ public class MemberService {
                 MemberResponseDto.builder()
                         .id(member.getMemberId())
                         .email(member.getEmail())
-                        .nickname(member.getNickname())
+                        .nickname(member.getNickname()+"#"+member.getCheckNum())
                         .createdAt(member.getCreatedAt())
                         .build()
         );
@@ -115,7 +115,7 @@ public class MemberService {
         return ResponseDto.success(MemberResponseDto.builder()
                 .id(member.getMemberId())
                 .email(member.getEmail())
-                .nickname(member.getNickname())
+                .nickname(member.getNickname()+"#"+member.getCheckNum())
                 .profilePic(member.getProfilePic())
                 .introduce(member.getIntroduce())
                 .createdAt(member.getCreatedAt())
@@ -166,7 +166,7 @@ public class MemberService {
             return ResponseDto.success(MemberResponseDto.builder()
                     .id(member.getMemberId())
                     .email(member.getEmail())
-                    .nickname(member.getNickname())
+                    .nickname(member.getNickname()+"#"+member.getCheckNum())
                     .profilePic(member.getProfilePic())
                     .introduce(member.getIntroduce())
                     .createdAt(member.getCreatedAt())

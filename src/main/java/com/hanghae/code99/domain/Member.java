@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Random;
 
 @Entity
 @Getter
@@ -33,6 +34,8 @@ public class Member extends Timestamped {
     private String profilePic;
 
     private String introduce;
+    Random random = new Random();
+    private final String checkNum = String.valueOf(random.nextInt(888888) + 111111);
 
     private boolean status;
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
