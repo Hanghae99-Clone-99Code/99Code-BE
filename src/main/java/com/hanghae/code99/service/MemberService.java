@@ -8,7 +8,6 @@ import com.hanghae.code99.domain.Member;
 import com.hanghae.code99.domain.jwttoken.JwtTokenDto;
 import com.hanghae.code99.jwt.TokenProvider;
 import com.hanghae.code99.repositrory.MemberRepository;
-import com.hanghae.code99.repositrory.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -28,17 +28,12 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    private final RefreshTokenRepository refreshTokenRepository;
-
 
     // 회원가입
     public ResponseDto<?> signup(SignUpRequestDto requestDto) {
         // 중복체크
         if (memberRepository.existsByEmail(requestDto.getEmail())) {
             throw new IllegalArgumentException("중복된 이메일입니다.");
-        }
-        if (memberRepository.existsByNickname(requestDto.getNickname())) {
-            throw new IllegalArgumentException("중복된 닉네임입니다.");
         }
         // 비밀번호 확인하기(password, passwordCheck)
         if (!requestDto.getPassword().equals(requestDto.getPasswordCheck())) {
@@ -48,8 +43,15 @@ public class MemberService {
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
         // 기본 이미지(랜덤)
         String defaultProfilePic = DefaultImages.getRandomMemberPic();
+        // 고유 해시태그 번호(식별번호) 생성(랜덤)
+        Random random = new Random();
+        String hashtag = "#" + (random.nextInt(999999));
+        // 해시태그 중복검사(while 조건문이 참인 동안 아래 실행)
+        while (null != isPresentHashtag(hashtag)) {
+            hashtag = "#" + (random.nextInt(999999));
+        }
         // 맴버 객체 생성
-        Member member = Member.of(requestDto, encodedPassword, defaultProfilePic);
+        Member member = Member.of(requestDto, encodedPassword, defaultProfilePic, hashtag);
         // 저장
         memberRepository.save(member);
         return ResponseDto.success(
@@ -57,6 +59,9 @@ public class MemberService {
                         .id(member.getMemberId())
                         .email(member.getEmail())
                         .nickname(member.getNickname())
+                        .profilePic(member.getProfilePic())
+                        .introduce(member.getIntroduce())
+                        .hashtag(member.getHashtag())
                         .createdAt(member.getCreatedAt())
                         .build());
     }
@@ -82,6 +87,9 @@ public class MemberService {
                         .id(member.getMemberId())
                         .email(member.getEmail())
                         .nickname(member.getNickname())
+                        .profilePic(member.getProfilePic())
+                        .introduce(member.getIntroduce())
+                        .hashtag(member.getHashtag())
                         .createdAt(member.getCreatedAt())
                         .build()
         );
@@ -118,29 +126,17 @@ public class MemberService {
                 .nickname(member.getNickname())
                 .profilePic(member.getProfilePic())
                 .introduce(member.getIntroduce())
+                .hashtag(member.getHashtag())
                 .createdAt(member.getCreatedAt())
                 .modifiedAt(member.getModifiedAt())
                 .build());
     }
 
-//    public ResponseDto<?> LoginInfo(Member member) {
-//
-//        return ResponseDto.success(MemberResponseDto.builder()
-//                .id(member.getMemberId())
-//                .nickname(member.getNickname())
-//                .profilePic(member.getProfilePic())
-//                .introduce(member.getIntroduce())
-//                .createdAt(member.getCreatedAt())
-//                .modifiedAt(member.getModifiedAt())
-//                .build());
-//    }
 
 
         // 내 프로필 수정
     public ResponseDto<?> editProfile(Member member, ProfileRequestDto profileRequestDto) {
-        if (null != isPresentNickname(profileRequestDto.getNickname())) {
-            return ResponseDto.fail("DUPLICATED_NICKNAME","중복된 닉네임 입니다.");
-        }
+
         // 회원 정보 업데이트
         member.editProfile(profileRequestDto);
         // 저장
@@ -151,6 +147,7 @@ public class MemberService {
                 .nickname(member.getNickname())
                 .profilePic(member.getProfilePic())
                 .introduce(member.getIntroduce())
+                .hashtag(member.getHashtag())
                 .createdAt(member.getCreatedAt())
                 .modifiedAt(member.getModifiedAt())
                 .build());
@@ -169,6 +166,7 @@ public class MemberService {
                     .nickname(member.getNickname())
                     .profilePic(member.getProfilePic())
                     .introduce(member.getIntroduce())
+                    .hashtag(member.getHashtag())
                     .createdAt(member.getCreatedAt())
                     .build());
         }
@@ -183,13 +181,7 @@ public class MemberService {
         }
         return ResponseDto.success("사용가능한 이메일입니다.");
     }
-    @Transactional(readOnly = true)
-    public ResponseDto<?> checkDupNickname(NicknameCheckDto requestDto){
-        if (null != isPresentNickname(requestDto.getNickname())) {
-            return ResponseDto.fail("DUPLICATED_NICKNAME", "중복된 닉네임입니다.");
-        }
-        return ResponseDto.success("사용가능한 닉네임입니다.");
-    }
+
 
     @Transactional(readOnly = true)
     public Member isPresentEmail(String email) {
@@ -198,10 +190,12 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public Member isPresentNickname(String nickname) {
-        Optional<Member> optionalMember = memberRepository.findByNickname(nickname);
+    public Member isPresentHashtag(String hashtag) {
+        Optional<Member> optionalMember = memberRepository.findByHashtag(hashtag);
         return optionalMember.orElse(null);
     }
+
+
 }
 
 

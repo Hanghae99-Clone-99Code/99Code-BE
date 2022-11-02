@@ -60,11 +60,6 @@ public class MemberController {
         return memberService.checkDupEmail(requestDto);
     }
 
-    //닉네임 중복확인
-    @PostMapping("/api/members/check/nick")
-    public ResponseDto<?> nickCheck(@RequestBody @Valid NicknameCheckDto requestDto){
-        return memberService.checkDupNickname(requestDto);
-    }
 
     //내 프로필 조회
     @GetMapping("/api/auth/members/profiles")
@@ -79,16 +74,6 @@ public class MemberController {
     public ResponseDto<?> veiwProfile(@PathVariable Long memberId){
         return memberService.viewProfile(memberId);
     }
-//    @GetMapping("/api/auth/members/info")
-//    public ResponseDto<?> LoginInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        Member member = userDetails.getMember();
-//
-//        try {
-//            return  memberService.LoginInfo(member);
-//        } catch (Exception e) {
-//            return  ResponseDto.fail("NOT_STATE_LOGIN", e.getMessage());
-//        }
-//    }
 
     //내 프로필 수정
     @PutMapping("/api/auth/members/profiles/edit")
