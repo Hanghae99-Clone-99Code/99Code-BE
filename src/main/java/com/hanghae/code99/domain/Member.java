@@ -34,6 +34,8 @@ public class Member extends Timestamped {
 
     private String introduce;
 
+    private boolean status;
+
     @JsonIgnore
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoomMember> roomList;
