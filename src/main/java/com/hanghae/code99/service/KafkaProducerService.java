@@ -3,7 +3,7 @@ package com.hanghae.code99.service;
 import com.hanghae.code99.controller.response.ChatMessageDto;
 import com.hanghae.code99.domain.message.ChatMessage;
 import com.hanghae.code99.repositrory.ChatMessageRepository;
-import com.hanghae.code99.repositrory.ChatRoomRepository;
+import com.hanghae.code99.repositrory.RoomRepository;
 import com.hanghae.code99.repositrory.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -16,7 +16,7 @@ public class KafkaProducerService {
     private final KafkaTemplate<String, ChatMessageDto> kafkaTemplate;
 
     private final MemberRepository memberRepository;
-    private final ChatRoomRepository chatRoomRepository;
+    private final RoomRepository roomRepository;
 
     private final ChatMessageRepository chatMessageRepository;
     public void sendMessage(ChatMessageDto chatMessageDto) {
@@ -27,7 +27,7 @@ public class KafkaProducerService {
         ChatMessage chatMessage = ChatMessage.builder()
                 .message(chatMessageDto.getMessage())
                 .member(memberRepository.findByNickname(chatMessageDto.getSender()).get())
-                .roomid(chatRoomRepository.findById(chatMessageDto.getRoomId()).get())
+                .room(roomRepository.findById(chatMessageDto.getRoomId()).get())
                 .type(chatMessageDto.getType())
                 .build();
         chatMessageRepository.save(chatMessage);
