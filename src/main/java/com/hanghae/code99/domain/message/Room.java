@@ -1,6 +1,7 @@
 package com.hanghae.code99.domain.message;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hanghae.code99.domain.Member;
 import com.hanghae.code99.domain.Timestamped;
 import lombok.AllArgsConstructor;
@@ -31,7 +32,8 @@ public class Room extends Timestamped {
     @Column
     private String description;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    @OneToMany(mappedBy = "room")
     private List<RoomMember> memberList;
 
 }

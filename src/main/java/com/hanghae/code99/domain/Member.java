@@ -34,6 +34,8 @@ public class Member extends Timestamped {
 
     private String hashtag;
     private boolean status;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoomMember> roomList;
 
@@ -60,4 +62,5 @@ public class Member extends Timestamped {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
 }

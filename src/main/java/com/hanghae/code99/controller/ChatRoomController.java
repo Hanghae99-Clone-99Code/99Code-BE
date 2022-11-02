@@ -30,7 +30,7 @@ public class ChatRoomController {
     // 특정 채팅방 조회
     @GetMapping("/room/{roomId}")
     @ResponseBody
-    public ResponseDto<?> roomInfo(@PathVariable Long roomId) {
-        return chatService.findById(roomId);
+    public ResponseDto<?> roomInfo(@PathVariable Long roomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return chatService.findOneRoom(roomId, userDetails);
     }
 }
