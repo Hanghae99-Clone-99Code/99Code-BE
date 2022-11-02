@@ -27,6 +27,12 @@ public class ChatRoomController {
         return chatService.createRoom(roomRequestDto, userDetails);
     }
 
+    // 채팅방 생성
+    @PostMapping("/invite/{roomId}")
+    public ResponseDto<?> inviteRoom(@PathVariable Long roomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return chatService.inviteRoom(roomId, userDetails);
+    }
+
     // 특정 채팅방 조회
     @GetMapping("/room/{roomId}")
     @ResponseBody

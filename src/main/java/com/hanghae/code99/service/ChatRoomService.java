@@ -69,6 +69,20 @@ public class ChatRoomService {
         return ResponseDto.success(roomResponseDto);
     }
 
+    //채팅방 초대
+    public ResponseDto<?> inviteRoom(Long roomId, UserDetailsImpl userDetails) {
+        Member member = userDetails.getMember();
+        Optional<Room> room = roomRepository.findById(roomId);
+        if (room.isEmpty()) {
+            return ResponseDto.fail("asd","존재하지 않는 채팅방입니다.");
+        }
+        RoomMember roomMember = RoomMember.builder()
+                .room(room.get())
+                .member(member)
+                .build();
+        roomMemberRepository.save(roomMember);
+        return ResponseDto.success("채팅방에 초대되었습니다.");
+    }
 
     //채팅방 생성
     public ResponseDto<?> createRoom(RoomRequestDto roomRequestDto, UserDetailsImpl userDetails) {
