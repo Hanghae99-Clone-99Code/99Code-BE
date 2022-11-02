@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomResponseDto {
+    private Long roomId;
     private String roomName;
     private String imageUrl;
     private String description;
