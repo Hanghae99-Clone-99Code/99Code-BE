@@ -25,13 +25,13 @@ public class ChatMessage extends Timestamped {
     @Column
     private MessageType type;
 
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "memberId", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    @JoinColumn(name = "room_id", nullable = false)
+    @JoinColumn(name = "roomId", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private ChatRoom roomid;
+    private Room room;
 
     @Column
     private String message;

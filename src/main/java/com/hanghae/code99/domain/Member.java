@@ -1,12 +1,16 @@
 package com.hanghae.code99.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hanghae.code99.controller.request.ProfileRequestDto;
 import com.hanghae.code99.controller.request.SignUpRequestDto;
+import com.hanghae.code99.domain.message.Room;
+import com.hanghae.code99.domain.message.RoomMember;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,6 +33,9 @@ public class Member extends Timestamped {
     private String profilePic;
 
     private String introduce;
+
+    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RoomMember> roomList;
 
 
     private Member(String email, String password, String nickname, String profilePic) {
