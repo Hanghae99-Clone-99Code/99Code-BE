@@ -18,6 +18,7 @@ public class MemberResponseDto {
   private String profilePic;
   private String introduce;
   private String hashtag;
+  private boolean status;
   private LocalDateTime createdAt;
   private LocalDateTime modifiedAt;
 
