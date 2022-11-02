@@ -31,6 +31,7 @@ public class ChatRoomService {
                 .map(RoomMember::getRoom)
                 .map(room -> RoomResponseDto
                         .builder()
+                        .roomId(room.getRoomId())
                         .roomName(room.getRoomName())
                         .description(room.getDescription())
                         .imageUrl(room.getImageUrl())
