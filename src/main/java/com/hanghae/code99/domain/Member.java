@@ -58,4 +58,8 @@ public class Member extends Timestamped {
         this.introduce = requestDto.getIntroduce();
     }
 
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
 }
