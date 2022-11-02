@@ -84,6 +84,14 @@ public class ChatRoomService {
         return ResponseDto.success("채팅방에 초대되었습니다.");
     }
 
+    //채팅방 나가기
+    public ResponseDto<?> removeRoom(Long roomId, UserDetailsImpl userDetails) {
+        Member member = userDetails.getMember();
+        Optional<Room> room = roomRepository.findById(roomId);
+        roomMemberRepository.deleteByRoomAndMember(room.get(), member);
+        return ResponseDto.success("채팅방에서 나가셨습니다.");
+    }
+
     //채팅방 생성
     public ResponseDto<?> createRoom(RoomRequestDto roomRequestDto, UserDetailsImpl userDetails) {
         Member member = userDetails.getMember();
