@@ -1,5 +1,6 @@
 package com.hanghae.code99.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hanghae.code99.controller.request.ProfileRequestDto;
 import com.hanghae.code99.controller.request.SignUpRequestDto;
 import com.hanghae.code99.domain.message.RoomMember;
