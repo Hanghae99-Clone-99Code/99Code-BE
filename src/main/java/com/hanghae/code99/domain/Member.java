@@ -34,6 +34,9 @@ public class Member extends Timestamped {
 
     private String introduce;
 
+    private boolean status;
+    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RoomMember> roomList;
 
 
     private Member(String email, String password, String nickname, String profilePic) {
@@ -54,4 +57,7 @@ public class Member extends Timestamped {
         this.introduce = requestDto.getIntroduce();
     }
 
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 }

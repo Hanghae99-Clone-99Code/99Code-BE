@@ -75,6 +75,8 @@ public class MemberService {
         JwtTokenDto tokenDto = tokenProvider.generateTokenDto(member);
         tokenToHeaders(tokenDto, response);
 
+        member.setStatus(true);
+
         return ResponseDto.success(
                 MemberResponseDto.builder()
                         .id(member.getMemberId())
@@ -100,6 +102,8 @@ public class MemberService {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "사용자를 찾을 수 없습니다.");
         }
+
+        member.setStatus(false);
 
         return tokenProvider.deleteRefreshToken(member);
     }
