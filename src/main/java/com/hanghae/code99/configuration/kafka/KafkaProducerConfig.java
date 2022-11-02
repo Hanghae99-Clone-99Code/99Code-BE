@@ -1,7 +1,6 @@
 package com.hanghae.code99.configuration.kafka;
 
 import com.hanghae.code99.controller.response.ChatMessageDto;
-import com.hanghae.code99.domain.message.ChatMessage;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +23,7 @@ public class KafkaProducerConfig {
     private String servers;
 
     @Bean
-    public ProducerFactory<String, ChatMessage> producerFactory() {
+    public ProducerFactory<String, ChatMessageDto> producerFactory() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, servers);
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -33,7 +32,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, ChatMessage> kafkaTemplate() {
+    public KafkaTemplate<String, ChatMessageDto> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 

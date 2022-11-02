@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class KafkaProducerService {
     private static final String TOPIC = "code99";
-    private final KafkaTemplate<String, ChatMessage> kafkaTemplate;
+    private final KafkaTemplate<String, ChatMessageDto> kafkaTemplate;
 
     private final MemberRepository memberRepository;
     private final RoomRepository roomRepository;
@@ -22,14 +22,15 @@ public class KafkaProducerService {
     public void sendMessage(ChatMessageDto chatMessageDto) {
         System.out.println("kafka producer : " + chatMessageDto.getMessage());
 
+        kafkaTemplate.send(TOPIC, chatMessageDto);
+
         ChatMessage chatMessage = ChatMessage.builder()
                 .message(chatMessageDto.getMessage())
-                .member(memberRepository.findByNickname(chatMessageDto.getNickname()).get())
+                .member(memberRepository.findByNickname(chatMessageDto.getSender()).get())
                 .room(roomRepository.findById(chatMessageDto.getRoomId()).get())
                 .type(chatMessageDto.getType())
                 .build();
         chatMessageRepository.save(chatMessage);
-        kafkaTemplate.send(TOPIC, chatMessage);
 
     }
 }
