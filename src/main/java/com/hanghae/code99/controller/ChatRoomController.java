@@ -6,6 +6,7 @@ import com.hanghae.code99.jwt.userdetails.UserDetailsImpl;
 import com.hanghae.code99.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,7 @@ public class ChatRoomController {
 
 
     // 채팅방 생성
+    @Transactional
     @DeleteMapping("/room/{roomId}")
     public ResponseDto<?> removeRoom(@PathVariable Long roomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return chatService.removeRoom(roomId, userDetails);
