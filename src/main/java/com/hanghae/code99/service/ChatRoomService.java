@@ -98,8 +98,9 @@ public class ChatRoomService {
     //채팅방 생성
     public ResponseDto<?> createRoom(RoomRequestDto roomRequestDto, MultipartFile multipartFile, UserDetailsImpl userDetails) {
         Member member = userDetails.getMember();
+        System.out.println(roomRequestDto.getChaennelName());
         Room room = Room.builder()
-                .roomName(roomRequestDto.getRoomName())
+                .roomName(roomRequestDto.getChaennelName())
                 .imageUrl("https://blog.kakaocdn.net/dn/HMebj/btq4X7aMqff/xn7Qkmomz6wVj1BB2gMesK/img.png")
                 .build();
         roomRepository.save(room);

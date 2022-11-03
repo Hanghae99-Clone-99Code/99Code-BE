@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class RoomRequestDto {
-    private String roomName;
+    private String chaennelName;
     private String imageUrl;
     private String description;
 }
