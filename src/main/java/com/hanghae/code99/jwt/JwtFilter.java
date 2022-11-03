@@ -26,21 +26,21 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         // request에서 토큰 뽑아오기
-        String accessToken = resolveAccessToken(request);
+        String refreshToken = resolveRefreshToken(request);
         // 적합한 액세스 토큰이라면 reissue 수행
-        if (accessToken != null && tokenProvider.validateToken(accessToken)) {
+        if (refreshToken != null && tokenProvider.validateToken(refreshToken)) {
             // 액세스 토큰으로부터 authentication 객체 얻어오기
-            Authentication authentication = tokenProvider.getAuthenticationByRefreshToken(accessToken);
+            Authentication authentication = tokenProvider.getAuthenticationByRefreshToken(refreshToken);
             // 받아온 Authentication 객체 시큐리티 컨텍스트 홀더에 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         else{
             // request에서 토큰 뽑아오기
-            String refreshToken = resolveRefreshToken(request);
+            String accessToken = resolveAccessToken(request);
             if( // 적합한 리프레시 토큰이라면 authentication 에 추가
-                StringUtils.hasText(refreshToken) && tokenProvider.validateToken(refreshToken)) {
+                StringUtils.hasText(accessToken) && tokenProvider.validateToken(accessToken)) {
                 // 리프레시 토큰으로부터 Authentication 객체 얻어오기
-                Authentication authentication = tokenProvider.getAuthentication(refreshToken);
+                Authentication authentication = tokenProvider.getAuthentication(accessToken);
                 // 받아온 Authentication 객체 시큐리티 컨텍스트 홀더에 저장
                 SecurityContextHolder.getContext().setAuthentication(authentication);}
         }

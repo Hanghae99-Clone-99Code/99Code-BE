@@ -3,7 +3,6 @@ package com.hanghae.code99.service;
 import com.hanghae.code99.controller.request.RoomRequestDto;
 import com.hanghae.code99.controller.response.ResponseDto;
 import com.hanghae.code99.controller.response.RoomResponseDto;
-import com.hanghae.code99.domain.DefaultImages;
 import com.hanghae.code99.domain.Member;
 import com.hanghae.code99.domain.message.ChatMessage;
 import com.hanghae.code99.domain.message.Room;
@@ -16,11 +15,11 @@ import com.hanghae.code99.repositrory.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,6 +37,7 @@ public class ChatRoomService {
     private final TokenProvider tokenProvider;
 
     private RoomMember roomMember;
+    private FileService fileService;
     private FileUpdateService fileUpdateService;
 
 
@@ -107,20 +107,45 @@ public class ChatRoomService {
     }
 
     //채팅방 생성
-    public ResponseDto<?> createRoom(RoomRequestDto roomRequestDto, UserDetailsImpl userDetails) {
-        Member member = userDetails.getMember();
-        Room room = Room.builder()
+//    public ResponseDto<?> createRoom(RoomRequestDto roomRequestDto, UserDetailsImpl userDetails) {
+//        Member member = userDetails.getMember();
+//        Room room = Room.builder()
+//                .roomName(roomRequestDto.getRoomName())
+//                .imageUrl(DefaultImages.getRandomRoomPic())
+//                .description(roomRequestDto.getDescription())
+//                .build();
+//        roomRepository.save(room);
+//        roomMemberRepository.save(RoomMember.builder()
+//                .member(member)
+//                .room(room)
+//                .build());
+//        return ResponseDto.success(room);
+//    }
+    //채팅방 생성
+    public ResponseDto<?> createRoom(
+            RoomRequestDto roomRequestDto,
+            MultipartFile images,
+            HttpServletRequest request) throws IOException {
+        if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) { //토큰 검증
+            return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
+        }
+        Member member = tokenProvider.getMemberFromAuthentication(); //토큰에서 member정보 꺼내오기
+
+        String fileUrl = fileService.uploadFile(images);
+
+                Room room = Room.builder()
                 .roomName(roomRequestDto.getRoomName())
-                .imageUrl(DefaultImages.getRandomRoomPic())
+                .imageUrl(fileUrl)
                 .description(roomRequestDto.getDescription())
                 .build();
-        roomRepository.save(room);
+                roomRepository.save(room);
         roomMemberRepository.save(RoomMember.builder()
                 .member(member)
                 .room(room)
                 .build());
         return ResponseDto.success(room);
     }
+
 
     //채팅방 수정
     @Transactional

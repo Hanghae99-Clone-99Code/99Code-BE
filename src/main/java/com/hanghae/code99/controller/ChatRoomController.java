@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,19 +28,27 @@ public class ChatRoomController {
     }
 
     // 채팅방 생성
-    @PostMapping("/room")
-    public ResponseDto<?> createRoom(@RequestBody RoomRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return chatService.createRoom(roomRequestDto, userDetails);
+//    @PostMapping("/room")
+//    public ResponseDto<?> createRoom(@RequestBody RoomRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        return chatService.createRoom(roomRequestDto, userDetails);
+//    }
+
+    @RequestMapping(value = "/room", method = RequestMethod.POST,consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE}, produces = "application/json")
+    public ResponseDto<?> createPost(
+            @RequestPart(value = "file") String requestDto,
+            @RequestPart(value = "uploader", required = false) MultipartFile images,
+            HttpServletRequest request) throws IOException {
+        RoomRequestDto convertedDto = roomRequestConverter.convert(requestDto);
+        return chatService.createRoom(convertedDto, images, request);
     }
 
-
-    // 채팅방 생성
+    // 채팅방 삭제
     @DeleteMapping("/room/{roomId}")
     public ResponseDto<?> removeRoom(@PathVariable Long roomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return chatService.removeRoom(roomId, userDetails);
     }
 
-    // 채팅방 생성
+    // 채팅방 초대
     @PostMapping("/invite/{roomId}")
     public ResponseDto<?> inviteRoom(@PathVariable Long roomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return chatService.inviteRoom(roomId, userDetails);
@@ -51,23 +60,14 @@ public class ChatRoomController {
         return chatService.findOneRoom(roomId, userDetails);
     }
     // 채팅방 수정
-    @PutMapping(value = "/room/{roomId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseDto<?> updateRoom(
-            @PathVariable Long roomId, // 수정하고자 하는 Room의 고유 ID
-            @RequestPart(value = "media", required = false) MultipartFile multipartFiles, // 수정할 미디어 파일
-            @RequestPart(value = "postDto") String requestDto, // 수정 정보
-            HttpServletRequest request) { // 현재 로그인한 유저의 인증 정보를 확인하기 위한 HttpServletRequest
-        RoomRequestDto convertedDto = roomRequestConverter.convert(requestDto);
-        return chatService.updateRoom(roomId, convertedDto, multipartFiles, request);
-    }
-
-//    @PostMapping("/room/{roomId}")
-//    public ResponseDto<?> createPost(@RequestPart("data") RoomRequestDto requestDto,
-//                                     HttpServletRequest request,@RequestPart("image") MultipartFile images){
-//        try {
-//            return chatService.updateRoom(requestDto,request, images);
-//        } catch (IOException e) {
-//            throw new RuntimeException("error");
-//        }
+//    @PutMapping(value = "/room/{roomId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+//    public ResponseDto<?> updateRoom(
+//            @PathVariable Long roomId, // 수정하고자 하는 Room의 고유 ID
+//            @RequestPart(value = "media", required = false) MultipartFile multipartFiles, // 수정할 미디어 파일
+//            @RequestPart(value = "postDto") String requestDto, // 수정 정보
+//            HttpServletRequest request) { // 현재 로그인한 유저의 인증 정보를 확인하기 위한 HttpServletRequest
+//        RoomRequestDto convertedDto = roomRequestConverter.convert(requestDto);
+//        return chatService.updateRoom(roomId, convertedDto, multipartFiles, request);
 //    }
+
 }
