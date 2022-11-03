@@ -1,13 +1,14 @@
 package com.hanghae.code99.service;
 
 import com.hanghae.code99.controller.request.RoomRequestDto;
-import com.hanghae.code99.controller.response.MemberResponseDto;
 import com.hanghae.code99.controller.response.ResponseDto;
 import com.hanghae.code99.controller.response.RoomResponseDto;
+import com.hanghae.code99.domain.DefaultImages;
 import com.hanghae.code99.domain.Member;
 import com.hanghae.code99.domain.message.ChatMessage;
 import com.hanghae.code99.domain.message.Room;
 import com.hanghae.code99.domain.message.RoomMember;
+import com.hanghae.code99.jwt.TokenProvider;
 import com.hanghae.code99.jwt.userdetails.UserDetailsImpl;
 import com.hanghae.code99.repositrory.ChatMessageRepository;
 import com.hanghae.code99.repositrory.RoomMemberRepository;
@@ -15,7 +16,11 @@ import com.hanghae.code99.repositrory.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,6 +34,13 @@ public class ChatRoomService {
     private final RoomMemberRepository roomMemberRepository;
 
     private final ChatMessageRepository chatMessageRepository;
+
+    private final TokenProvider tokenProvider;
+
+    private RoomMember roomMember;
+    private FileUpdateService fileUpdateService;
+
+
 
     //채팅방 불러오기
     public ResponseDto<?> findAllRoom(UserDetailsImpl userDetails) {
@@ -99,7 +111,7 @@ public class ChatRoomService {
         Member member = userDetails.getMember();
         Room room = Room.builder()
                 .roomName(roomRequestDto.getRoomName())
-                .imageUrl(roomRequestDto.getImageUrl())
+                .imageUrl(DefaultImages.getRandomRoomPic())
                 .description(roomRequestDto.getDescription())
                 .build();
         roomRepository.save(room);
@@ -109,4 +121,55 @@ public class ChatRoomService {
                 .build());
         return ResponseDto.success(room);
     }
+
+    //채팅방 수정
+    @Transactional
+    public ResponseDto<?> updateRoom(
+            Long roomId,
+            RoomRequestDto requestDto,
+            MultipartFile multipartFiles,
+            HttpServletRequest request) {
+
+        if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) { //토큰 검증
+            return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
+        }
+        Member member = tokenProvider.getMemberFromAuthentication(); //토큰에서 member정보 꺼내오기
+        if (null == member) {
+            return ResponseDto.fail("MEMBER_NOT_FOUND","사용자를 찾을 수 없습니다.");
+        }
+        Room room = isPresentRoom(roomId); //보내준 roomId로 해당 room이 있는지 확인
+        if (null == room) {
+            return ResponseDto.fail("ROOM_NOT_FOUND","채팅방을 찾을 수 없습니다.");
+        }
+        roomMember = belongToRoom(roomId, member); //해당 roomId와 member로 이 멤버가 이 채팅방에 속한 유저인지 확인
+        if (!room.inMember(roomMember)){
+            return ResponseDto.fail("INVALID_MEMBER","채팅방에 속한 유저가 아닙니다.");
+        }
+
+        room.update(requestDto); //room에 roomName,description 넣어줌
+        fileUpdateService.update(multipartFiles); //room에 imageUrl 넣어줌
+
+        return ResponseDto.success(
+                RoomRequestDto.builder()
+                        .roomName(room.getRoomName())
+                        .imageUrl(room.getImageUrl())
+                        .description(room.getDescription())
+                        .build()
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public Room isPresentRoom(Long roomId) {
+        Optional<Room> optionalRoom = roomRepository.findById(roomId);
+        return optionalRoom.orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public RoomMember belongToRoom(Long roomId, Member member) {
+        Optional<Room> optionalRoom = roomRepository.findById(roomId); //roomId로 해당 room을 불러옴
+        Optional<RoomMember> optionalMember = roomMemberRepository.findByMemberbyRoom(member, optionalRoom); //해당 room과 토큰에서 추출한 멤버로 조회해서 RoomMember를 불러옴
+        return optionalMember.orElse(null);
+    }
+
+
 }

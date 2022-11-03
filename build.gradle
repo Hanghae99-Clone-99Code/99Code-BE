@@ -50,6 +50,12 @@ dependencies {
     //Kafka
     implementation 'org.springframework.kafka:spring-kafka'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
+
+    //    AWS
+    implementation group: 'software.amazon.awssdk', name: 'aws-sdk-java', version: '2.17.236'
+//    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.2'
+
 }
 
 tasks.named('test') {
