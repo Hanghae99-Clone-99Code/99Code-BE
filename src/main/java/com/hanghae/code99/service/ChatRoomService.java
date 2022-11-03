@@ -15,6 +15,7 @@ import com.hanghae.code99.repositrory.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -95,12 +96,11 @@ public class ChatRoomService {
     }
 
     //채팅방 생성
-    public ResponseDto<?> createRoom(RoomRequestDto roomRequestDto, UserDetailsImpl userDetails) {
+    public ResponseDto<?> createRoom(RoomRequestDto roomRequestDto, MultipartFile multipartFile, UserDetailsImpl userDetails) {
         Member member = userDetails.getMember();
         Room room = Room.builder()
                 .roomName(roomRequestDto.getRoomName())
-                .imageUrl(roomRequestDto.getImageUrl())
-                .description(roomRequestDto.getDescription())
+                .imageUrl("https://blog.kakaocdn.net/dn/HMebj/btq4X7aMqff/xn7Qkmomz6wVj1BB2gMesK/img.png")
                 .build();
         roomRepository.save(room);
         roomMemberRepository.save(RoomMember.builder()

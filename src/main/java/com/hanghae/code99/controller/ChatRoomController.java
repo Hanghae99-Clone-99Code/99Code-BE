@@ -5,10 +5,14 @@ import com.hanghae.code99.controller.response.ResponseDto;
 import com.hanghae.code99.jwt.userdetails.UserDetailsImpl;
 import com.hanghae.code99.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,9 +27,17 @@ public class ChatRoomController {
     }
 
     // 채팅방 생성
-    @PostMapping("/room")
-    public ResponseDto<?> createRoom(@RequestBody RoomRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return chatService.createRoom(roomRequestDto, userDetails);
+//    @PostMapping("/room")
+//    public ResponseDto<?> createRoom(@RequestBody RoomRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        return chatService.createRoom(roomRequestDto, userDetails);
+//    }
+
+    @PostMapping(value = "/room", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE}, produces = "application/json")
+    public ResponseDto<?> createRoom(
+            @RequestPart(value = "uploader") RoomRequestDto roomRequestDto,
+            @RequestPart(value = "file", required = false) MultipartFile multipartFile,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+        return chatService.createRoom(roomRequestDto, multipartFile, userDetails);
     }
 
 
