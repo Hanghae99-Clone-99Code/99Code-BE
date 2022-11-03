@@ -143,7 +143,7 @@ public class ChatRoomService {
     @Transactional(readOnly = true)
     public RoomMember belongToRoom(Long roomId, Member member) {
         Optional<Room> optionalRoom = roomRepository.findById(roomId); //roomId로 해당 room을 불러옴
-        Optional<RoomMember> optionalMember = roomMemberRepository.findByMemberbyRoom(member, optionalRoom); //해당 room과 토큰에서 추출한 멤버로 조회해서 RoomMember를 불러옴
+        Optional<RoomMember> optionalMember = roomMemberRepository.findByMemberAndRoom(member, optionalRoom); //해당 room과 토큰에서 추출한 멤버로 조회해서 RoomMember를 불러옴
         return optionalMember.orElse(null);
     }
 
