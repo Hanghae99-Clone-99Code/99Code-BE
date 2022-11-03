@@ -65,6 +65,8 @@ public class ChatRoomService {
                 .imageUrl(room.get().getImageUrl())
                 .memberList(memberList)
                 .chatMessageList(chatMessageList)
+                .onlineUser(room.get().getMemberList().stream().filter(roomMember1 -> roomMember1.getMember().isStatus()).count())
+                .offlineUser(room.get().getMemberList().stream().filter(roomMember1 -> !roomMember1.getMember().isStatus()).count())
                 .build();
         return ResponseDto.success(roomResponseDto);
     }
