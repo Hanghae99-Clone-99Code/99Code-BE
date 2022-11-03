@@ -14,4 +14,6 @@ public interface RoomMemberRepository extends JpaRepository<RoomMember, Long> {
 
     @Override
     void deleteById(Long aLong);
+
+    Optional<RoomMember> findByMemberbyRoom(Member member, Optional<Room> optionalRoom);
 }

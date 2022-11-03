@@ -2,7 +2,7 @@ package com.hanghae.code99.domain.message;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hanghae.code99.domain.Member;
+import com.hanghae.code99.controller.request.RoomRequestDto;
 import com.hanghae.code99.domain.Timestamped;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,9 +32,19 @@ public class Room extends Timestamped {
     @Column
     private String description;
 
+    @OneToOne
+    private Files files;
+
     @JsonIgnore
     @OneToMany(mappedBy = "room")
     private List<RoomMember> memberList;
 
+    public boolean inMember(RoomMember roomMember) {
+        return this.memberList.contains(roomMember);
+    }
+    public void update(RoomRequestDto roomRequestDto) {
+        this.roomName = roomRequestDto.getRoomName();
+        this.description = roomRequestDto.getDescription();
+    }
 }
 

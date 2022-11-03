@@ -26,22 +26,25 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         // request에서 토큰 뽑아오기
-        String refreshToken = resolveRefreshToken(request);
         String accessToken = resolveAccessToken(request);
-        // 적합한 리프레시 토큰이라면 reissue 수행
-        if (refreshToken != null && tokenProvider.validateToken(refreshToken)) {
-            // 리프레시 토큰으로부터 authentication 객체 얻어오기
-            Authentication authentication = tokenProvider.getAuthenticationByRefreshToken(refreshToken);
+        // 적합한 액세스 토큰이라면 reissue 수행
+        if (accessToken != null && tokenProvider.validateToken(accessToken)) {
+            // 액세스 토큰으로부터 authentication 객체 얻어오기
+            Authentication authentication = tokenProvider.getAuthenticationByRefreshToken(accessToken);
             // 받아온 Authentication 객체 시큐리티 컨텍스트 홀더에 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-        // 적합한 엑세스 토큰이라면 authentication 에 추가
-        else if (StringUtils.hasText(accessToken) && tokenProvider.validateToken(accessToken)) {
-            // 토큰으로부터 Authentication 객체 얻어오기
-            Authentication authentication = tokenProvider.getAuthentication(accessToken);
-            // 받아온 Authentication 객체 시큐리티 컨텍스트 홀더에 저장
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        else{
+            // request에서 토큰 뽑아오기
+            String refreshToken = resolveRefreshToken(request);
+            if( // 적합한 리프레시 토큰이라면 authentication 에 추가
+                StringUtils.hasText(refreshToken) && tokenProvider.validateToken(refreshToken)) {
+                // 리프레시 토큰으로부터 Authentication 객체 얻어오기
+                Authentication authentication = tokenProvider.getAuthentication(refreshToken);
+                // 받아온 Authentication 객체 시큐리티 컨텍스트 홀더에 저장
+                SecurityContextHolder.getContext().setAuthentication(authentication);}
         }
+
 
         filterChain.doFilter(request, response);
     }
