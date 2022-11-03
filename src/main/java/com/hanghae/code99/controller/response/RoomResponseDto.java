@@ -20,4 +20,6 @@ public class RoomResponseDto {
     private String description;
     private List<Member> memberList;
     private List<ChatMessage> chatMessageList;
+    private Long onlineUser;
+    private Long offlineUser;
 }
